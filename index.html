@@ -1,0 +1,63 @@
+<html>
+<head>
+    <title>新しい放置ゲームのチャレンジ状況</title>
+    <link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+    <script type="text/javascript" src="./nig-challenge-viewer.js"></script>
+</head>
+
+<body>
+    <h1>新しい放置ゲームのチャレンジ状況</h1>
+    達成済み挑戦：<input type="text" id="cleared" placeholder="例：1,2,3" size="30" oninput="stateChanged()"><br>
+    <small>（新しい放置ゲームでデベロッパーツール(Ctrl+Shift+i)を開き、Consoleに出力されるchallengeclearedの値を入力してください）</small><br>
+    <label><input name="a" id="all" type="radio" onchange="stateChanged()" checked>すべて表示</label><br>
+    <label><input name="a" id="only-cleared" type="radio" onchange="stateChanged()">達成済のみ表示</label><br>
+    <label><input name="a" id="only-not-cleared" type="radio" onchange="stateChanged()">非達成のみ表示</label><br>
+
+    <div id="example-table"></div>
+    <script type="text/javascript">
+        var data = createChallengeTable(new Map());
+        var table = new Tabulator("#example-table", {
+            initialSort:[
+            ],
+            columns:[
+                {title:"ID", field:"id"},
+                {title:"挑戦1", field:"c1"},
+                {title:"挑戦2", field:"c2"},
+                {title:"挑戦3", field:"c3"},
+                {title:"挑戦4", field:"c4"},
+                {title:"挑戦5", field:"c5"},
+                {title:"挑戦6", field:"c6"},
+                {title:"挑戦7", field:"c7"},
+                {title:"挑戦8", field:"c8"},
+            ],
+            rowFormatter:function(row){
+                var data = row.getData()
+                if(data.cleared){
+                    row.getElement().style.backgroundColor = "silver";
+                }
+            },
+            data:data
+        });
+
+        function stateChanged() {
+            var input = document.getElementById("cleared").value;
+            var cleared = input.split(',').map(function (s) {return parseInt(s)});
+            if (input != "" && !cleared.every(Number.isInteger)){
+                return;
+            }
+            var map = new Map();
+            cleared.forEach(function(n){map.set(n)});
+            var data = createChallengeTable(map);
+            if (document.getElementById('all').checked) {
+            } else if (document.getElementById('only-cleared').checked) {
+                data = data.filter(function(row){ return row.cleared; });
+            } else if (document.getElementById('only-not-cleared').checked) {
+                data = data.filter(function(row){ return !row.cleared; });
+            }
+            table.replaceData(data);
+        }
+    </script>
+</body>
+
+</html>
