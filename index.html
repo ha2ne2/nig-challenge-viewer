@@ -1,65 +1,93 @@
 <html>
 <head>
     <title>新しい放置ゲームの挑戦状況ビューワ</title>
-    <link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
-    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
-    <script type="text/javascript" src="./nig-challenge-viewer.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y263NX0JMV"></script>
     <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-Y263NX0JMV');</script>
 </head>
 
 <body>
-    <h1>新しい放置ゲームの挑戦状況ビューワ</h1>
-    達成済み挑戦：<input type="text" id="cleared" placeholder="例：1,2,3" size="30" oninput="stateChanged()"><br>
-    <small>（<a href="https://dem08656775.github.io/newincrementalgame/">新しい放置ゲーム</a>でデベロッパーツール(Ctrl+Shift+i)を開き、Consoleに出力されるchallengeclearedの値を入力してください）</small><br>
-    <label><input name="a" id="all" type="radio" onchange="stateChanged()" checked>すべて表示</label><br>
-    <label><input name="a" id="only-cleared" type="radio" onchange="stateChanged()">達成済のみ表示</label><br>
-    <label><input name="a" id="only-not-cleared" type="radio" onchange="stateChanged()">非達成のみ表示</label><br>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
 
-    <div id="example-table"></div>
-    <script type="text/javascript">
-        var data = createChallengeTable(new Map());
-        var table = new Tabulator("#example-table", {
-            initialSort:[
-            ],
-            columns:[
-                {title:"ID", field:"id"},
-                {title:"挑戦1", field:"c1"},
-                {title:"挑戦2", field:"c2"},
-                {title:"挑戦3", field:"c3"},
-                {title:"挑戦4", field:"c4"},
-                {title:"挑戦5", field:"c5"},
-                {title:"挑戦6", field:"c6"},
-                {title:"挑戦7", field:"c7"},
-                {title:"挑戦8", field:"c8"},
-            ],
-            rowFormatter:function(row){
-                var data = row.getData()
-                if(data.cleared){
-                    row.getElement().style.backgroundColor = "silver";
-                }
-            },
-            data:data
+    td {
+      border: 1px solid #555;
+      height: 30px;
+      width: 30px;
+      text-align: center;
+    }
+
+    .border-bottom {
+      border-bottom: 3px solid black;
+    }
+
+    .border-right {
+      border-right: 3px solid black;
+    }
+  </style>
+
+  <h1>新しい放置ゲームの挑戦状況ビューワ</h1>
+  達成済み挑戦：<input type="text" id="cleared" placeholder="例：1,2,3" size="80" oninput="stateChanged()"><br>
+  <small>（<a href="https://dem08656775.github.io/newincrementalgame/">新しい放置ゲーム</a>でデベロッパーツール(Ctrl+Shift+i)を開き、Consoleに出力されるchallengeclearedの値を入力してください）</small><br><br>
+
+  <table>
+    <tr><td rowspan=4 colspan=4 id="token" class="border-bottom border-right"><b style="font-size: 24;">勲章<br>0</b></td><td></td><td>5</td><td></td><td></td><td>5</td><td>5</td><td></td><td>5</td><td></td><td>5</td><td></td><td></td><td>5</td><td>5</td><td></td><td>5</td></tr>
+    <tr><td></td><td></td><td>6</td><td></td><td>6</td><td></td><td>6</td><td>6</td><td></td><td></td><td>6</td><td></td><td>6</td><td></td><td>6</td><td>6</td></tr>
+    <tr><td></td><td></td><td></td><td>7</td><td></td><td>7</td><td>7</td><td>7</td><td></td><td></td><td></td><td>7</td><td></td><td>7</td><td>7</td><td>7</td></tr>
+    <tr><td class="border-bottom"></td><td class="border-bottom"></td><td class="border-bottom"></td><td class="border-bottom"></td><td class="border-bottom"></td><td class="border-bottom"></td><td class="border-bottom"></td><td class="border-bottom"></td><td class="border-bottom">8</td><td class="border-bottom">8</td><td class="border-bottom">8</td><td class="border-bottom">8</td><td class="border-bottom">8</td><td class="border-bottom">8</td><td class="border-bottom">8</td><td class="border-bottom">8</td></tr>
+    <tr><td></td><td></td><td></td><td class="border-right"></td><td id="0">／</td><td id="8"></td><td id="4"></td><td id="2"></td><td id="12"></td><td id="10"></td><td id="6"></td><td id="14"></td><td id="1"></td><td id="9"></td><td id="5"></td><td id="3"></td><td id="13"></td><td id="11"></td><td id="7"></td><td id="15"></td></tr>
+    <tr><td>1</td><td></td><td></td><td class="border-right"></td><td id="128"></td><td id="136"></td><td id="132"></td><td id="130"></td><td id="140"></td><td id="138"></td><td id="134"></td><td id="142"></td><td id="129"></td><td id="137"></td><td id="133"></td><td id="131"></td><td id="141"></td><td id="139"></td><td id="135"></td><td id="143"></td></tr>
+    <tr><td></td><td>2</td><td></td><td class="border-right"></td><td id="64"></td><td id="72"></td><td id="68"></td><td id="66"></td><td id="76"></td><td id="74"></td><td id="70"></td><td id="78"></td><td id="65"></td><td id="73"></td><td id="69"></td><td id="67"></td><td id="77"></td><td id="75"></td><td id="71"></td><td id="79"></td></tr>
+    <tr><td></td><td></td><td>3</td><td class="border-right"></td><td id="32"></td><td id="40"></td><td id="36"></td><td id="34"></td><td id="44"></td><td id="42"></td><td id="38"></td><td id="46"></td><td id="33"></td><td id="41"></td><td id="37"></td><td id="35"></td><td id="45"></td><td id="43"></td><td id="39"></td><td id="47"></td></tr>
+    <tr><td>1</td><td>2</td><td></td><td class="border-right"></td><td id="192"></td><td id="200"></td><td id="196"></td><td id="194"></td><td id="204"></td><td id="202"></td><td id="198"></td><td id="206"></td><td id="193"></td><td id="201"></td><td id="197"></td><td id="195"></td><td id="205"></td><td id="203"></td><td id="199"></td><td id="207"></td></tr>
+    <tr><td>1</td><td></td><td>3</td><td class="border-right"></td><td id="160"></td><td id="168"></td><td id="164"></td><td id="162"></td><td id="172"></td><td id="170"></td><td id="166"></td><td id="174"></td><td id="161"></td><td id="169"></td><td id="165"></td><td id="163"></td><td id="173"></td><td id="171"></td><td id="167"></td><td id="175"></td></tr>
+    <tr><td></td><td>2</td><td>3</td><td class="border-right"></td><td id="96"></td><td id="104"></td><td id="100"></td><td id="98"></td><td id="108"></td><td id="106"></td><td id="102"></td><td id="110"></td><td id="97"></td><td id="105"></td><td id="101"></td><td id="99"></td><td id="109"></td><td id="107"></td><td id="103"></td><td id="111"></td></tr>
+    <tr><td>1</td><td>2</td><td>3</td><td class="border-right"></td><td id="224"></td><td id="232"></td><td id="228"></td><td id="226"></td><td id="236"></td><td id="234"></td><td id="230"></td><td id="238"></td><td id="225"></td><td id="233"></td><td id="229"></td><td id="227"></td><td id="237"></td><td id="235"></td><td id="231"></td><td id="239"></td></tr>
+    <tr><td></td><td></td><td></td><td class="border-right">4</td><td id="16"></td><td id="24"></td><td id="20"></td><td id="18"></td><td id="28"></td><td id="26"></td><td id="22"></td><td id="30"></td><td id="17"></td><td id="25"></td><td id="21"></td><td id="19"></td><td id="29"></td><td id="27"></td><td id="23"></td><td id="31"></td></tr>
+    <tr><td>1</td><td></td><td></td><td class="border-right">4</td><td id="144"></td><td id="152"></td><td id="148"></td><td id="146"></td><td id="156"></td><td id="154"></td><td id="150"></td><td id="158"></td><td id="145"></td><td id="153"></td><td id="149"></td><td id="147"></td><td id="157"></td><td id="155"></td><td id="151"></td><td id="159"></td></tr>
+    <tr><td></td><td>2</td><td></td><td class="border-right">4</td><td id="80"></td><td id="88"></td><td id="84"></td><td id="82"></td><td id="92"></td><td id="90"></td><td id="86"></td><td id="94"></td><td id="81"></td><td id="89"></td><td id="85"></td><td id="83"></td><td id="93"></td><td id="91"></td><td id="87"></td><td id="95"></td></tr>
+    <tr><td></td><td></td><td>3</td><td class="border-right">4</td><td id="48"></td><td id="56"></td><td id="52"></td><td id="50"></td><td id="60"></td><td id="58"></td><td id="54"></td><td id="62"></td><td id="49"></td><td id="57"></td><td id="53"></td><td id="51"></td><td id="61"></td><td id="59"></td><td id="55"></td><td id="63"></td></tr>
+    <tr><td>1</td><td>2</td><td></td><td class="border-right">4</td><td id="208"></td><td id="216"></td><td id="212"></td><td id="210"></td><td id="220"></td><td id="218"></td><td id="214"></td><td id="222"></td><td id="209"></td><td id="217"></td><td id="213"></td><td id="211"></td><td id="221"></td><td id="219"></td><td id="215"></td><td id="223"></td></tr>
+    <tr><td>1</td><td></td><td>3</td><td class="border-right">4</td><td id="176"></td><td id="184"></td><td id="180"></td><td id="178"></td><td id="188"></td><td id="186"></td><td id="182"></td><td id="190"></td><td id="177"></td><td id="185"></td><td id="181"></td><td id="179"></td><td id="189"></td><td id="187"></td><td id="183"></td><td id="191"></td></tr>
+    <tr><td></td><td>2</td><td>3</td><td class="border-right">4</td><td id="112"></td><td id="120"></td><td id="116"></td><td id="114"></td><td id="124"></td><td id="122"></td><td id="118"></td><td id="126"></td><td id="113"></td><td id="121"></td><td id="117"></td><td id="115"></td><td id="125"></td><td id="123"></td><td id="119"></td><td id="127"></td></tr>
+    <tr><td>1</td><td>2</td><td>3</td><td class="border-right">4</td><td id="240"></td><td id="248"></td><td id="244"></td><td id="242"></td><td id="252"></td><td id="250"></td><td id="246"></td><td id="254"></td><td id="241"></td><td id="249"></td><td id="245"></td><td id="243"></td><td id="253"></td><td id="251"></td><td id="247"></td><td id="255"></td></tr>
+  </table>
+
+  <h1>他のコンテンツ</h1>
+  <a href="https://ha2ne2.github.io/nig-simulator/">新しい放置ゲームのシミュレータ</a>
+  <script type="text/javascript">
+    var prevMap = new Map();
+
+    function stateChanged() {
+        var input = document.getElementById("cleared").value;
+        var cleared = input.split(',').map(function (s) {return parseInt(s)}).filter(function(n){return Number.isInteger(n)});
+
+        var map = new Map();
+        cleared.forEach(function(n){
+          map.set(n)
         });
 
-        function stateChanged() {
-            var input = document.getElementById("cleared").value;
-            var cleared = input.split(',').map(function (s) {return parseInt(s)});
-            if (input != "" && !cleared.every(Number.isInteger)){
-                return;
-            }
-            var map = new Map();
-            cleared.forEach(function(n){map.set(n)});
-            var data = createChallengeTable(map);
-            if (document.getElementById('all').checked) {
-            } else if (document.getElementById('only-cleared').checked) {
-                data = data.filter(function(row){ return row.cleared; });
-            } else if (document.getElementById('only-not-cleared').checked) {
-                data = data.filter(function(row){ return !row.cleared; });
-            }
-            table.replaceData(data);
+        var deleted = new Map();
+        for (const key of prevMap.keys()) {
+          if(!map.has(key)) {
+            deleted.set(key);
+            document.getElementById(key).innerText = "";
+          }
         }
-    </script>
-</body>
 
+        var added = new Map();
+        for (const key of map.keys()) {
+          if(!prevMap.has(key)) {
+            added.set(key);
+            document.getElementById(key).innerText = "○";
+          }
+        }
+
+        document.getElementById("token").innerHTML = "<b style=\"font-size: 24;\">勲章<br>" + map.size + "</b>";
+        prevMap = map;
+      }
+  </script>
+
+</body>
 </html>
